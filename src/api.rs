@@ -6,30 +6,30 @@ use actix_web::{
     web::{Json, Path},
     // HttpResponse,
 };
-use chrono::Local;
+// use chrono::Local;
 
 use crate::db::*;
 use crate::model::*;
 use crate::prelude::*;
 
 #[post(
-    "/food/{name}/{brand}/{cost}/{weight}/{volume}"
+    "/food"
 )]
 pub async fn create(
-    food: Path<(String, String, usize, usize, usize)>,
+    food: Json<Food>,
 ) -> Result<Json<Food>> {
-    let (name, brand, cost, weight, volume) =
-        food.into_inner();
-    let food = Food {
-        id: None,
-        name,
-        brand,
-        cost,
-        weight,
-        volume,
-        created_at: Local::now(),
-    };
-    let food = add_food(food).await?;
+    // let (name, brand, cost, weight, volume) =
+    //     food.into_inner();
+    // let food = Food {
+    //     id: None,
+    //     name,
+    //     brand,
+    //     cost,
+    //     weight,
+    //     volume,
+    //     created_at: Local::now(),
+    // };
+    let food = add_food(food.into_inner()).await?;
 
     Ok(Json(food))
 }
@@ -63,9 +63,10 @@ pub async fn delete(
     Ok(Json(deleted))
 }
 
-#[get("/foods")]
+#[get("/allfood")]
 pub async fn list() -> Result<Json<Vec<Food>>> {
     let foods = get_all_foods().await?;
 
+    // dbg!(&foods);
     Ok(Json(foods))
 }

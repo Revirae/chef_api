@@ -19,12 +19,12 @@ pub enum Error {
 impl ResponseError for Error {
     fn error_response(&self) -> HttpResponse {
         match self {
-            Error::Generic(msg) => {
-                HttpResponse::InternalServerError()
-                    .body(msg.clone())
+            Error::Generic(msg) => HttpResponse::InternalServerError().body(msg.clone()),
+            Error::FailedToLockDb(op_name) => {
+                let body = op_name.to_owned() + " operation";
+                HttpResponse::InternalServerError().body(body)
             }
-            _ => HttpResponse::InternalServerError()
-                .body(self.to_string()),
+            _ => HttpResponse::InternalServerError().body(self.to_string()),
         }
     }
 }

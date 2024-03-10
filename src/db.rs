@@ -19,12 +19,16 @@ pub async fn add_food(data: Food) -> Result<Food> {
 }
 
 pub async fn get_food(id: String) -> Result<Food> {
-    let th = id.split_once(":").unwrap();
-
+    // let th = id.split_once(":").unwrap();
+    // let id = "food:".to_owned() + &id;
     match DB.get() {
         Some(db) => {
-            let rec = db.select(th).await?;
-            Ok(rec.unwrap())
+            let rec = db.select(("food", id.clone())).await?;
+            if rec.is_none() {
+                Err(Error::Generic(id + "not found"))
+            } else {
+                Ok(rec.unwrap())
+            }
         }
         None => {
             Err(Error::FailedToLockDb("get".into()))

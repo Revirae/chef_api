@@ -14,3 +14,9 @@ chrono = { version = "0.4.35", features = ["serde"] }
 futures = "0.3.30"
 actix-cors = "0.7.0"
 once_cell = "1.19.0"
+serde_json = "1.0.114"
+tokio = { version = "1.36.0", features = ["full"] }
+
+[dev-dependencies]
+anyhow = "1.0.80"
+httpc-test = "0.1.9"
